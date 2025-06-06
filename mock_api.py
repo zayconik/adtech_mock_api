@@ -39,8 +39,8 @@ def get_campaign_data():
         city, zipcode = random.choice(geo_data[country]["cities"][state])
 
         campaigns.append({
-            "campaign_id": f"cmp{random.randint(100,199)}",
-            "ad_id": f"ad{random.randint(1, 99):03}",
+            "campaign_id": f"cmp{random.randint(100,120)}",
+            "ad_id": f"ad{random.randint(1, 20):03}",
             "date": today,
             "brand": random.choice(["BrandA", "BrandB", "BrandC"]),
             "country": country,
