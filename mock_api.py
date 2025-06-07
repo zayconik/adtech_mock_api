@@ -33,7 +33,7 @@ def get_campaign_data():
     today = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     campaigns = []
 
-    for i in range(500):
+    for i in range(10):
         country = random.choice(list(geo_data.keys()))
         state = random.choice(geo_data[country]["states"])
         city, zipcode = random.choice(geo_data[country]["cities"][state])
