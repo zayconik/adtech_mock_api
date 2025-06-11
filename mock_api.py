@@ -4,7 +4,7 @@ import random
 
 app = Flask(__name__)
 
-# 📌 Define logical grouped location data
+#  Define logical grouped location data
 geo_data = {
     "US": {
         "states": ["California", "Texas"],
@@ -28,9 +28,13 @@ geo_data = {
     }
 }
 
+def maybe_null(value, null_chance=0.1):
+    return value if random.random() > null_chance else None
+
 @app.route('/campaign-data', methods=['GET'])
 def get_campaign_data():
-    today = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    today = datetime.now().strftime('%Y-%m-%d')
+
     campaigns = []
 
     for i in range(10):
@@ -39,18 +43,18 @@ def get_campaign_data():
         city, zipcode = random.choice(geo_data[country]["cities"][state])
 
         campaigns.append({
-            "campaign_id": f"cmp{random.randint(100,120)}",
-            "ad_id": f"ad{random.randint(1, 20):03}",
+            "campaign_id": maybe_null(f"cmp{random.randint(100,120)}"),
+            "ad_id": maybe_null(f"ad{random.randint(1, 20):03}"),
             "date": today,
-            "brand": random.choice(["BrandA", "BrandB", "BrandC"]),
-            "country": country,
-            "state": state,
-            "city": city,
-            "zipcode": zipcode,
-            "impressions": random.randint(5000, 15000),
-            "clicks": random.randint(100, 500),
-            "spend": round(random.uniform(100.0, 500.0), 2),
-            "conversions": random.randint(5, 50)
+            "brand": maybe_null(random.choice(["BrandA", "BrandB", "BrandC"])),
+            "country": maybe_null(country),
+            "state": maybe_null(state),
+            "city": maybe_null(city),
+            "zipcode": maybe_null(zipcode),
+            "impressions": maybe_null(random.randint(5000, 15000)),
+            "clicks": maybe_null(random.randint(100, 500)),
+            "spend": maybe_null(round(random.uniform(100.0, 500.0), 2)),
+            "conversions": maybe_null(random.randint(5, 50))
         })
 
     return jsonify(campaigns)
