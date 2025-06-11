@@ -43,7 +43,7 @@ def get_campaign_data():
 
     campaigns = []
 
-    for _ in range(300_000):
+    for _ in range(100_000):
         country = random.choice(list(geo_data.keys()))
         state = random.choice(geo_data[country]["states"])
         city, zipcode = random.choice(geo_data[country]["cities"][state])
