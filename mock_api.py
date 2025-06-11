@@ -28,7 +28,7 @@ geo_data = {
     }
 }
 
-def maybe_null(value, null_chance=1):
+def maybe_null(value, null_chance=0.1):
     return value if random.random() > null_chance else None
 
 @app.route('/campaign-data', methods=['GET'])
@@ -37,7 +37,7 @@ def get_campaign_data():
 
     campaigns = []
 
-    for i in range(10):
+    for i in range(1000):
         country = random.choice(list(geo_data.keys()))
         state = random.choice(geo_data[country]["states"])
         city, zipcode = random.choice(geo_data[country]["cities"][state])
