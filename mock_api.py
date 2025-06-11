@@ -28,7 +28,7 @@ geo_data = {
     }
 }
 
-def maybe_null(value, null_chance=0.1):
+def maybe_null(value, null_chance=1):
     return value if random.random() > null_chance else None
 
 @app.route('/campaign-data', methods=['GET'])
