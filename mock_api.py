@@ -4,7 +4,25 @@ import random
 
 app = Flask(__name__)
 
-# Define logical grouped location data
+#  Ad ID → Brand mapping (ad belongs to only one brand)
+ad_brand_map = {
+    101: "BrandA",
+    102: "BrandB",
+    103: "BrandC",
+    104: "BrandD",
+    105: "BrandE",
+    106: "BrandF",
+    107: "BrandG"
+}
+
+# Campaign → Ad mappings (many-to-many)
+campaign_ad_map = {
+    "A": [101, 102, 103],
+    "B": [101, 104, 106],
+    "C": [103, 105, 107]
+}
+
+#  Location Data
 geo_data = {
     "US": {
         "states": ["California", "Texas"],
@@ -33,30 +51,36 @@ def maybe_null(value, null_chance=0.1):
 
 def random_date(start_date, end_date):
     delta = end_date - start_date
-    random_days = random.randint(0, delta.days)
-    return (start_date + timedelta(days=random_days)).strftime('%Y-%m-%d')
+    return (start_date + timedelta(days=random.randint(0, delta.days))).strftime('%Y-%m-%d')
 
 @app.route('/campaign-data', methods=['GET'])
 def get_campaign_data():
     start = datetime.strptime("2025-02-01", "%Y-%m-%d")
     end = datetime.strptime("2025-06-10", "%Y-%m-%d")
 
-    campaigns = []
+    data = []
 
-    for _ in range(1000):
+    for _ in range(100):
+        # Select random campaign
+        campaign_id = random.choice(list(campaign_ad_map.keys()))
+        ad_id = random.choice(campaign_ad_map[campaign_id])
+        brand = ad_brand_map[ad_id]
+
+        # Random location
         country = random.choice(list(geo_data.keys()))
         state = random.choice(geo_data[country]["states"])
         city, zipcode = random.choice(geo_data[country]["cities"][state])
 
+        # Metrics
         impressions = maybe_null(random.randint(5000, 15000))
         clicks = maybe_null(random.randint(0, impressions if impressions else 500))
         conversions = maybe_null(random.randint(0, clicks if clicks else 100))
 
-        campaigns.append({
-            "campaign_id": maybe_null(f"cmp{random.randint(100,120)}"),
-            "ad_id": maybe_null(f"ad{random.randint(1, 20):03}"),
+        data.append({
+            "campaign_id": campaign_id,
+            "ad_id": ad_id,
+            "brand": brand,
             "date": random_date(start, end),
-            "brand": maybe_null(random.choice(["BrandA", "BrandB", "BrandC"])),
             "country": maybe_null(country),
             "state": maybe_null(state),
             "city": maybe_null(city),
@@ -67,7 +91,7 @@ def get_campaign_data():
             "conversions": conversions
         })
 
-    return jsonify(campaigns)
+    return jsonify(data)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
