@@ -1,10 +1,10 @@
 from flask import Flask, jsonify
-from datetime import datetime, timedelta
+from datetime import datetime
 import random
 
 app = Flask(__name__)
 
-#  Ad ID → Brand mapping (ad belongs to only one brand)
+# Ad ID → Brand mapping (ad belongs to only one brand)
 ad_brand_map = {
     101: "BrandA",
     102: "BrandB",
@@ -22,7 +22,7 @@ campaign_ad_map = {
     "C": [103, 105, 107]
 }
 
-#  Location Data
+# Location Data
 geo_data = {
     "US": {
         "states": ["California", "Texas"],
@@ -49,19 +49,13 @@ geo_data = {
 def maybe_null(value, null_chance=0.1):
     return value if random.random() > null_chance else None
 
-def random_date(start_date, end_date):
-    delta = end_date - start_date
-    return (start_date + timedelta(days=random.randint(0, delta.days))).strftime('%Y-%m-%d')
-
 @app.route('/campaign-data', methods=['GET'])
 def get_campaign_data():
-    start = datetime.strptime("2025-02-01", "%Y-%m-%d")
-    end = datetime.strptime("2025-06-10", "%Y-%m-%d")
-
+    today = datetime.now().strftime('%Y-%m-%d')
     data = []
 
     for _ in range(100):
-        # Select random campaign
+        # Select random campaign and ad
         campaign_id = random.choice(list(campaign_ad_map.keys()))
         ad_id = random.choice(campaign_ad_map[campaign_id])
         brand = ad_brand_map[ad_id]
@@ -80,7 +74,7 @@ def get_campaign_data():
             "campaign_id": campaign_id,
             "ad_id": ad_id,
             "brand": brand,
-            "date": random_date(start, end),
+            "date": today,
             "country": maybe_null(country),
             "state": maybe_null(state),
             "city": maybe_null(city),
