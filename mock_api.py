@@ -74,7 +74,7 @@ def get_campaign_data():
             "campaign_id": maybe_null(campaign_id),
             "ad_id": maybe_null(ad_id),
             "brand": maybe_null(brand),
-            "date": today,  # Always present
+            "date": maybe_null(today),  # Now nullable
             "country": maybe_null(country),
             "state": maybe_null(state),
             "city": maybe_null(city),
