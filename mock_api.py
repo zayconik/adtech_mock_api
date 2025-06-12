@@ -54,7 +54,7 @@ def get_campaign_data():
     today = datetime.now().strftime('%Y-%m-%d')
     data = []
 
-    for _ in range(100):
+    for _ in range(1000):
         # Select random campaign and ad
         campaign_id = random.choice(list(campaign_ad_map.keys()))
         ad_id = random.choice(campaign_ad_map[campaign_id])
