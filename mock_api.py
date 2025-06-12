@@ -4,7 +4,7 @@ import random
 
 app = Flask(__name__)
 
-# Ad ID → Brand mapping (ad belongs to only one brand)
+# Ad ID → Brand mapping
 ad_brand_map = {
     101: "BrandA",
     102: "BrandB",
@@ -55,12 +55,12 @@ def get_campaign_data():
     data = []
 
     for _ in range(1000):
-        # Select random campaign and ad
+        # Select campaign and ad
         campaign_id = random.choice(list(campaign_ad_map.keys()))
         ad_id = random.choice(campaign_ad_map[campaign_id])
         brand = ad_brand_map[ad_id]
 
-        # Random location
+        # Select location
         country = random.choice(list(geo_data.keys()))
         state = random.choice(geo_data[country]["states"])
         city, zipcode = random.choice(geo_data[country]["cities"][state])
@@ -71,10 +71,10 @@ def get_campaign_data():
         conversions = maybe_null(random.randint(0, clicks if clicks else 100))
 
         data.append({
-            "campaign_id": campaign_id,
-            "ad_id": ad_id,
-            "brand": brand,
-            "date": today,
+            "campaign_id": maybe_null(campaign_id),
+            "ad_id": maybe_null(ad_id),
+            "brand": maybe_null(brand),
+            "date": today,  # Always present
             "country": maybe_null(country),
             "state": maybe_null(state),
             "city": maybe_null(city),
